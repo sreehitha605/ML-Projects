@@ -1,0 +1,14 @@
+\begin{tabular}{p{3cm} p{10cm}}
+ACR & Adaptive Color Reduction \\
+BR  & Background Region \\
+CC  & Connected Component\\
+CMYK & Cyan, Magenta, Yellow, Black\\
+DFT & Discrete Fourier Transform\\
+FFT & Fast Fourier Transform\\
+MBR & Minimum Bounding Rectangle\\
+NTR &  Near-Text Region \\
+OCR & Optical Character Recognition\\
+PLA & Page Layout Analysis \\ 
+RGB & Red, Green, Blue\\
+TR & Text Region \\
+\end{tabular}

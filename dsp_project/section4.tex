@@ -1,0 +1,45 @@
+\subsection{Conclusion}
+\subsection*{Predictions by the model}
+\textcolor{green}{\hspace{0.5cm}{Using KNN  Algorithm:}}
+\begin{lstlisting}[language=Python]
+  new_data = {
+    'N': 75,  
+    'P': 69,  
+    'K': 47, 
+    'temperature': 25,  
+    'humidity': 80,  
+    'ph': 6.3,  
+    'rainfall': 105  
+  }
+  new_input = pd.DataFrame(new_data, index=[0])
+\end{lstlisting}
+\begin{lstlisting}[language=Python]
+  predicted_label = svm.predict(new_input)
+  print("Predicted label:", predicted_label[0])
+
+\end{lstlisting}
+\hspace{2in}\textcolor{red}{Output:}
+\newline
+\hspace{2in}\textcolor{grey}{Predicted label: banana}
+\newpage
+\textcolor{green}{\hspace{0.5cm}{Using SVM Algorithm:}}
+\begin{lstlisting}[language=Python]
+
+  predicted_label = knn.predict(new_input)
+  print("Predicted label:", predicted_label[0])
+
+\end{lstlisting}
+\hspace{2in}\textcolor{red}{Output:}
+\newline
+\hspace{2in}\textcolor{grey}{Predicted label: banana}
+
+\newline
+
+\paragraph{}The new data includes nitrogen(N)=75,phosphorus(P)=69,potassium(K)=47,
+temperature=25,
+humidity=80,pH=6.3 and rainfall=105,and the system predicts the label to be "banana".This prediction suggests that these parameter values check with the characteristics given the growth and cultivation of bananas.\par In crop recommendation project,we built a system that can predict the type of crop based on certain parameters such as amount of nitrogen,phosphorus,potassium,temperature,
+humidity,pH,and rainfall.We used two different machine learning algorithms namely like k-Nearest Neighbors(KNN) and Support Vector Machines(SVM), to make these predictions.Our system performed well,by achieving an accuracy of 99.75\%. This means the syatem correctly predict the type of crop in almost all cases. To check the performance of our models,we also created confusion matrix.\par
+In conclusion,our project has successfully developed a crop prediction system using machine learning algorithms.By considering the given parameters,our system predicts the type of crop accurately.It helps farmers in making better decisions about crop selection.
+
+\subsection{Future Work}
+\paragraph{} A crop recommedation system is a valuable application that can help farmers in making better decisions about which crops to grow based on various factors such as soil quality and climate conditions. It can suggest suitable crop for a specific region or field based on the parameters it helps farmers select crops that have higher chances of success and profitability. By recommending crops that are well suited to the conditions farmers can maximize crop productivity. It leads to better yeilds.It helps farmers optimize the use of fetilizers,water etc.,and reducing wastage.

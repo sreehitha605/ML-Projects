@@ -1,0 +1,90 @@
+\documentclass[a4,12pt,oneside]{book}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{subfig}
+\usepackage{makeidx}
+\usepackage{wrapfig}
+%\usepackage{fullpage}
+\usepackage{alltt}
+\usepackage{setspace}
+\usepackage{listings}
+\usepackage{framed}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\linespread{1.5}
+
+\geometry{tmargin=0.8 in,  bmargin=0.8 in, lmargin=1.2 in,  rmargin= 0.9 in}
+\makeindex
+\pagestyle{empty}
+\begin{titlepage}
+\thispagestyle{empty}
+  \title{\bfseries\Huge Crop Recommendation System}
+  \author{Project Report \\ \\
+ {\Large Bachelor}\\in\\{\Large Computer Science}\\ \\ By\\\bf\\{Basireddy Sreehitha}\\ \\
+ { \includegraphics[width=1.3in]{rgukt.png}}
+ \\Rajiv Gandhi University Of Knowledge And Technologies
+ \\S.M. Puram , Srikakulam -532410
+ \\Andhra Pradesh, India}
+\end{titlepage}
+
+\renewenvironment{frontmatter}{\pagenumbering{roman}}{\newpage
+        \pagenumbering{arabic}}
+\newenvironment{abstract}{\null\vfil\prefacesection{Abstract}}{\par\vfill\null}
+\newenvironment{acknowledgments}{\null\vfil\prefacesection{Acknowledgments}}{\par\vfill\null}
+\newenvironment{abbrevations}{\null\vfil\prefacesection{Abbreviations}}{\par\vfill\null}
+\newenvironment{notations}{\null\vfil\prefacesection{Notations}}{\par\vfill\null}
+\renewcommand{\bibname}{Bibliography}
+
+\newenvironment{dedication}
+  {\centering
+  \thispagestyle{empty}
+  \clearpage\null\vfill
+  \sl {\large To,}\\
+  \hspace{1.5in}}{
+  \vspace{3in}\vfill\null}
+  \def\prefacesection#1{%
+  \chapter*{#1}
+  \addcontentsline{toc}{chapter}{#1}
+  \markboth{#1}{#1}
+  }
+ 
+\date{}
+
+\begin{document}
+\maketitle
+\pagestyle{plain}
+ 
+%==========================
+
+
+
+%========================
+
+
+\newenvironment{abstract1}{\vfil\prefacesection{Abstract}}{\par\vfill}
+\begin{abstract1}
+   \input{abstract.tex}
+\end{abstract1}
+
+
+\tableofcontents
+
+\renewcommand{\baselinestretch}{1.7}
+\chapter{Introduction}
+\input{section1.tex}
+
+
+\chapter{Approach to Crop Recommendation System}
+\input{section2.tex}
+
+\chapter{Code}
+\input{section3.tex}
+
+\chapter{Conclusion and Future Work}
+\input{section4.tex}
+
+\end{document}

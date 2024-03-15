@@ -1,0 +1,551 @@
+\section{Introduction}
+Printed Color documents contain text, graphics and drawings which are colored using many colors. In many cases some portions of this text are  highlighted with headings and may be overlayed on different colored background. There are also regions with larger font size when compared with normal text. A typical Newspaper image as shown in Fig.~\ref{fig:colnewspaper}, and it contains headings, subheadings, colored text, graphics, normal Text and reversed Text. Our main motive is to binarize the color document which removes graphics and extracts all text (normal text, colored text and reversed text). In the coming sections we will see the problems related to color document binarization and solutions proposed.
+
+ \begin{figure}[h]
+\centering
+ \footnotesize
+\includegraphics[width=18cm,height=15cm]{figures/sachin.jpg}
+\caption{Typical Color Newspaper image }
+\label{fig:colnewspaper}
+\end{figure} 
+ 
+\section{Problems in Color document binarization}
+The main problems in processing color documents are classified into three categories-
+\begin{itemize}
+\item Colored text on colored background - Conversion of colored text with colored background to gray scale will lead to many problems. This is because of foreground and background colors may sometimes have the same gray values. As shown in Fig.~\ref{fig:clr2gray}, the foreground color is blue and background color is brown, on conversion to grayscale both colors will have same gray values. Hence the colored text information is lost. This is because of graylevel values calculated as 0.299 $\times$ Red + 0.587 $ \times$ Green + 0.114 $\times$ Blue using the standard sRGB to grayscale conversion formula. Hence the conversion will lead to loss of text. 
+  
+\item Dither Patterns - Periodic patterns are observed on the color document image because of printing technology used as shown in Fig.~\ref{fig:dither}. Usually commercial printing technology uses CMYK screens, which are aligned in some orientations with minimum overlap error. When it  is observed from normal viewing distances, the eye integrates the colored dots, producing the illusion of continuous shades of color. But on viewing them closely we can identify these periodic dither patterns. These dither patterns produces maximum noise on conversion from color to grayscale. We will study in detail about the formation and elimination of these patterns in the coming sections .
+
+\item Graphics vs Text identification - Inorder to provide a valid input for text recognition to OCR, complete text extraction is to be done by eliminating graphics.
+\end{itemize}
+
+
+
+ \begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=10cm,height=2cm]{figures/clr2gray.png}
+\caption{Color to Gray Conversion }
+\label{fig:clr2gray}
+\end{figure}
+
+  \begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=10cm,height=7cm]{figures/ditherpattern.png}
+\caption{Dither patterns }
+\label{fig:dither}
+\end{figure} 
+
+
+
+\section{Problem Solving Approach }
+\subsection{Solution for  removal of Dither Patterns using FFTs}
+
+\subsubsection{Halftone and their Spectra} 
+Commercial printers produces documents by depositing ink on paper. Hence shades of gray or color cannot be obtained them directly. To produce continuous-tone, images are typically printed as a halftone. A Halftone consists of an array of closely spaced micro-dots with varying size, all produced with same color of ink. At normal viewing distances human eye perceives colour or grayscale by integrating all the dots and the surrounding white spaces, producing a continuous shade of color. Different shades of gray or color can be simulated by varying the number of
+dots which are all of equal size. There were two  approaches for this halftoning process:  Clustered and Dispersed. Clustered-dot ordered dither is produced by grouping  pixels to clusters and Dispersed-dot ordered dither is done by making position of the micro-dot is scattered.Aliasing and other visual artifacts can be reduced by employing various optimizing techniques.
+
+Because of its simplicity, commercial printers typically use a version of clustered-dot ordered dither halftoning usually called the `classical screen method \cite{ref-3}. A glass plate etched with a grid of fine lines screen is placed between camera lens and image, to reproduce an image. The screen transforms the continuous tones in the input image into macro dots on the output. The size of the macro dot is proportional to the input gray value. Although these macro dots are bigger than micro dots, but these are visually imperceptible.
+Colored version of halftoning is a variation of grayscale one. Colored version uses CMYK (Cyan,Magenta,Yellow,K-Black) colors. Initially the input image is decomposed into CMYK Components. On each of component, image is converted to halftone using classical screen method as shown in Fig.\ref{fig:clrhalftonprocess} .
+ 
+ \begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=14cm,height=8cm]{figures/clrhalftonprocess.jpg}
+\caption{Color Halftoning Process }
+\label{fig:clrhalftonprocess}
+\end{figure}
+
+
+These four halftones been overlaid to form a single composite halftone. The overlays are rotated  relative to each other to minimize dot overlap, which reduces inter-color Moire patterns and chromatic errors. Usually Fig.\ref{fig:screenangle} (a) is been widely used, where Yellow screen is aligned at $0\,^{\circ}$, Cyan with $15\,^{\circ}$, Black with $45\,^{\circ}$  and Magenta with $75\,^{\circ}$. Color halftone as shown in  Fig.\ref{fig:dither} is formed because these inter-color Moire patterns, but invisible to perceive. But when zoomed on that portion we are able to identify these periodic patterns.
+
+
+
+ \begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=9cm,height=6cm]{figures/screen_angles.png}
+\caption{CMYK Screen Orientation Angles }
+\label{fig:screenangle}
+\end{figure}
+
+
+
+Clustered-dot ordered dither halftones have an interesting property. Due to optical illusion, we cannot identify this invisible texture with our naked eye. In gray scale images,  Dunn.et.al \cite{ref-10} shown that this invisible texture produces high-frequency spectral energy that is distinct from the visible information in the halftone and from other information on the page. And the halftones dervied from different images (but produced by the same screen) are effectively instances of the same texture, even though the halftones may visually appear quite different.
+Fig:~\ref{fig:grayhalfspectra} shows that grayscale image and log-magnitude specturm with high frequencies circled in black.
+
+
+ \begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=12cm,height=7cm]{figures/grayhalfspectra.png}
+\caption{(a) Halftone of a grayscale image  (b) Log-magnitude spectrum with  spectral energy (circled in black) at high frequencies }
+\label{fig:grayhalfspectra}
+\end{figure}
+
+
+When coming to Color Images, as we know that it is formed using CMYK Screens, and we scan the image in RGB mode with scanner. Hence there is conversion between CMYK to RGB mode. Conversion between the two-color schemes is as follows: Cyan absorbs Red and stimulates both Blue and Green (Cyan = White - Red), Magenta absorbs Green and stimulates both Blue and Red (Magenta = White - Green), Yellow absorbs Blue and stimulates both Red and Green (Yellow = White - Blue) and Black absorbs all the colors and therefore stimulates none. Because of these things when CMYK to RGB conversion takes place in Scanner, each of Red, Green, Blue color bands are produced with two colors of Cyan, Magenta, Yellow. That is, Red component is present in both Yellow and Magenta etc. Hence each color band is influenced by two colors and those two colors which have same macro dot sizes but aligned in different orientation.
+So the spectra of each color band contains high frequency components of two colors which are circular and centered at DC (freq =0). The Original image and Red, Green, Blue spectra are shown in Fig:~\ref{fig:spectrargb}, where high-frequency spectral components of the color halftone lie on a circle centered at DC. This suggests that a circular band filter can be used to remove these high frequency components. Because the given image Fig:~\ref{fig:spectrargb} (a), is a squared one, the high frequency components form a circle. But if we consider a rectangular image, the high frequency components will form an elliptical shape. 
+
+From the above discussion a band reject filter can be used to filter dither patterns for the documents. There were several band reject filters available, out of which we used  butterworth band reject  because, it has no ripples in the pass band (lesser ringing effect). The filter function for Butterworth band reject  $H(u,v)$ is given by  \\
+\begin{equation}
+  H(u,v) =  \left( \frac{1}{1 +  {   \left( \displaystyle \frac{DW}{D^2 - D_o^2}\right)  } ^{2n}   }       \right)
+    \label{eq1}
+    \end{equation}
+
+where \\
+$D(u,v)$ is the distance from the center of the frequency rectangle \\
+$D_o$ is the radial center of the band of interest \\
+$W$ is the width of the band of interest \\
+
+
+
+
+ \begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=16cm,height=16cm]{figures/babu.png}
+\caption{Original Image with Spectra for Color Bands  }
+\label{fig:spectrargb}
+\end{figure}
+
+
+
+ When coming to two-dimensional geometry equations of circle and ellipse which look like \\
+
+ \begin{equation} For Circle \hspace{0.8cm}  (x-centre.x)^2 + (y-centre.y)^2 = r^2       \label{eq3}    \end{equation} 
+
+\begin{equation} For Ellipse \hspace{0.8cm}   \frac{ (x-centre.x)^2}{a^2} + \frac{ (y-centre.y)^2}{b^2}   = 1      \end{equation} 
+
+where $r$ is the radius of the circle, and $a,b$ are the length of semi-major and semi-minor axis of the ellipse. As we can observe closely the equation of circle Equation~\ref{eq3}, it is also a form of ellipse with length of semi-minor axis and length of semi-major axis is equal to $r (a=b=r)$. The parameter $D(u,v)$ in the  Equ~\ref{eq1} given by \\
+
+\begin{equation}  D(u,v)  = \sqrt[2]{  \frac{ (u-centre.x)^2}{a^2} + \frac{ (v-centre.y)^2}{b^2}      }  \label{eq2} \end{equation}
+
+
+
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\node [draw,rectangle,minimum width=10cm,minimum height=6cm] {};
+\shade[draw,shading=ball, outer color=black] ellipse (4cm and 2cm);
+\shade[draw,shading=ball, outer color=white] (0,0) ellipse (3.5cm and 1.5cm);
+
+
+\draw (0,3) -- (0,-3);
+\draw (-5,0) -- (5,0);
+\coordinate[label=below left:$O$] (O) at (0,0);
+
+
+\draw [|->] [color=red] (0,-0.25) -- (3.75,-0.25);
+\node [below , color=blue] at (2,-0.5) {a};
+
+
+
+\draw [<->] [color=green] (3.75,-0.25) -- (4,-0.25);
+\node [below , color=blue] at (4,-0.25) {W};
+
+\draw [fill , color=red] (3.75,0) circle [radius=.05];
+
+\draw [|->] [color=green] (0.25,0) -- (0.25,1.75);
+\node [below , color=blue] at (0.5,1) {b};
+
+
+\draw [<->] [color=red] (0.25,1.75) -- (0.25,2);
+\node [above , color=blue] at (0.5,1.75) {W};
+
+\draw [fill , color=green] (0,1.75) circle [radius=.05];
+\end{tikzpicture}
+\caption{Ellipse Estimation }
+\label{fig:ellipse}
+\end{figure}
+
+
+
+
+
+
+In the above Equ ~\ref{eq2} $ D(u,v) $  is normalized distance from centre $(x,y)$ to the point $(u,v)$. Now the values of $W$, and $D_o$ are to be determined. $W$ is width of the band, which could be value 10 or 20 depending on the required band width and the radial centre of interest $D_o$ is given by $W/2$. As stated before, for a circle $(a=b=r)$, the Equ~\ref{eq2} holds good for all type of image dimensions. The unknowns mentioned $a,b$ can be estimated manually by working on different images. The parameters $a$ and $b$ roughly depend on the dimensions of the image ($a$ = 0.66* width, $b$ = 0.66 * height). If the documents are same kind (produced by same halftone screens), then values remains good. But if the documents are with different kind, the estimations may change.
+
+From the above discussion, band reject filter can remove the dither portions on the image. Dither patterns present on graphics part of the document will be removed, this can observed by Inverse-FFT and merging the R, G, B bands to form a dither removed RGB image.  
+
+
+
+
+
+\subsection{Connected Component Algorithm for identifying Text vs Graphics}
+\label{ccsection}
+It is more important to remove graphics from a document before it gets to recognition. The simplest way to do this is to filter them using height of the component. As mentioned before, that on a document image text size is varied from the type of text (heading, subheading or normal text). Hence, to filter graphics from text, with height as a criteria can be done heuristically by finding out sizes of different text. Height of component is measured by finding out MBR (Minimum Bounding Rectangle) of the component and find $xmax -xmin$. As far as telugu text is considered there will be aksharas, vottus, matras are present and each letter can be combination of two or more of these. As shown in Fig ~\ref{fig:sampletelugutext} the Red color ones are vottus, Blue color are basic telugu characters and Green ones are basic character with matras.
+ \begin{figure}[h]
+\centering
+ \footnotesize
+\includegraphics[width=12cm,height=4cm]{figures/sampletelugutext.jpg}
+\caption{Sample Telugu Text }
+\label{fig:sampletelugutext}
+\end{figure} 
+
+
+ \begin{figure}[h]
+\centering
+ \footnotesize
+\includegraphics[width=16cm,height=8cm]{figures/graph150.png}
+\caption{Graph to Estimate Size of characters }
+\label{fig:graph150}
+\end{figure} 
+
+
+
+When we observe the vottus are of variable size and so are the basic characters. Inorder to classify, we worked on the corpus  of about 50 pages of Newspaper documents. The graph plotted between height of the component vs Number of Components as shown in Fig :\ref{fig:graph150}. We can notice that the largest peak at x = 24 is the actual size normal character, the vottus may be of size x = 14. From Fig :\ref{fig:graph150}  the heights are classified into the following classes:
+	
+\begin{table}[h]
+\centering
+ \footnotesize
+\caption{Empirical Values for Heights of Components  }
+\label{tab:heights}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|}
+\hline
+Height & Description \\ 
+\hline 
+$ \le$ 3 & noise\\
+\hline 
+4 $\le$ h $\le$ 30  & fullstop, commas, vottus, quotes, matras, normal characters  \\
+\hline
+31 $\le$ h $\le$ 50  & subheadings or words with vottus and matras  \\
+\hline
+51 $\le$ h $\le$ 78 & bold  words  \\
+\hline
+79 $\le$ h $\le$ 110   & bold Text   \\
+\hline
+111 $\le$ h $\le$ 150   & bold heading with votuus and matras   \\
+\hline
+151 $\le$ h $\le$ 209   & big headings   \\
+\hline
+210 $\le$ h   & graphics   \\
+\hline
+\end{tabular}
+\end{table}
+
+From the classification, we need MBR heights of components from 3 to 210 and the sizes above 210 can be eliminated. After removal of graphics, only text will be retained in the document. This document can be used in the next stage of OCR to recognize them.
+
+
+Finally on concluding this section we can say that removing dithered patterns and graphics will help us extract complete text in color document. The another problem reverse text can be solved as stated in Chapter 3 of manual extraction. The complete algorithm of binarization of color document will be detail in next section.
+
+\section{Algorithm}
+From the above discussion of solving out issues in color documents, we finally integrate the solutions in the ordered manner to binarize a color document. Conversion of an RGB into gray scale is  done by $opencv$ standard conversion.In case of newspapers which are  with white background binarization can be done straight forwardly using Otsu  \cite{ref-8} algorithm. The Complete algorithm is as follows:
+
+
+\begin{algorithm}[H]
+\caption{ Algorithm for Preprocessing of Color document  }
+
+Step 1: Dither patterns removal on input image\\
+Step 2: Conversion of Dithered removed RGB image to gray scale \\
+Step 3: Binarization of gray scale Image  \\
+Step 4: Graphics elimination \\
+Step 5: Reversed text extraction \\
+
+
+\end{algorithm}
+
+
+\vspace{0.5cm}
+
+
+\textbf{Step 1 : Dither Removal}
+
+The First step is to remove dither pattern from the given input image .\\
+Input 	: RGB image \\
+Output 	: dither removed RGB image \\
+
+
+
+\begin{algorithm}[H]
+\caption{ Algorithm  for dither removal  }
+
+a: For the given Input RGB image, split into R, G, B planes (3 gray scale images) \\
+b: On each plane obtain its FFT \\
+c: Use Butterworth’s Band Reject Filter to filter high frequency components  \\
+d: Obtain inverse-FFT of that plane \\
+e: Merge the filtered  R,G and B planes to  form dither removed  color image \\
+
+
+\end{algorithm}
+
+
+
+\vspace{0.5cm}
+
+
+\textbf{Step 2 : Conversion of dithered removed RGB image to gray scale}
+
+The Second step is to convert the dither removed RGB image into GrayScale . This is done by using $ opencv ~~ library$ standard, where the Grayvalue of the pixel is 
+\begin{center}
+Gray Value  = 0.299 $\times$ Red + 0.587 $ \times$ Green + 0.114 $\times$ Blue \\
+\end{center}
+
+Input 	: dither removed RGB image \\
+Output 	: gray scale image \\
+
+
+\vspace{0.5cm}
+
+
+\textbf{Step 3 : Binarization of grayscale image }
+
+The Third  step is to conversion  of  gray scale image into Binary Image .This is done using standard Otsu~\cite{ref-8} algorithm.\\
+Input 	: gray scale image \\
+Output 	: binary image \\
+
+
+
+\vspace{0.5cm}
+
+
+\textbf{Step 4: Graphics Elimination }
+
+The Fourth step is to eliminate graphics present in the document. As mentioned in the Section ~\ref{ccsection}, connected component algorithm finding out MBR and height of the component, the filtering of graphics can be done\\
+Input 	: binary image \\
+Output 	: graphics removed binary image \\
+
+\begin{algorithm}[H]
+\caption{ Algorithm  for graphics removal  }
+
+Apply Connected Component(CC) Algorithm on the Binary Image \;
+
+\ForEach{ Connected Component $CC_i$ }{
+
+height of $CC_i$ = MBR[i].xmax - MBR[i].xmin; 
+
+\If{ height $>$ 3  $ \And $  height $<$ 210}{
+Retain the Component
+}
+\Else{
+Eliminate the Component 
+}
+}
+
+
+
+\end{algorithm}
+
+
+\vspace{0.5cm}
+
+
+\textbf{Step 5: Reversed text extraction }
+
+The Final step is to extract the complete text present in the document. There may be a chance having a reversed text in document. As mentioned in Chapter 3, extraction of reversed text manually algorithm can be applied on the graphics removed binary image to extract the complete text.\\
+Input 	: graphics removed binary image \\
+Output 	: text only image  \\
+
+
+
+
+
+
+\section{Implementation Results}
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Input  Image]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/0_original.jpg}
+   \label{fig:e101}
+   }
+ \subfigure[Blue Plane]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/1_blue.jpg}
+   \label{fig:e102}
+   }
+
+\end{figure}
+
+
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Green Plane]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/1_green.jpg}
+   \label{fig:e103}
+   }
+ \subfigure[Red Plane]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/1_red.jpg}
+   \label{fig:e104}
+   }
+
+
+   \label{fig:e1to4}
+\caption{Input RGB Image and  Blue,Green and Red planes of it } 
+
+\end{figure}
+
+\textbf{Step 1 :} Input Image is splitted into Blue, Green and Red planes.
+
+
+\newpage
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Fft of Blue Plane]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/2dft_blue.jpg}
+   \label{fig:e201}
+   }
+ \subfigure[Butterworth band Reject Filter]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/3mask_b.jpg}
+   \label{fig:e202}
+   }
+
+\end{figure}
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Fft with filter]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/4dit_b.jpg}
+   \label{fig:e203}
+   }
+ \subfigure[Inverse FFT]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/5final_b.jpg}
+   \label{fig:e204}
+   }
+
+
+   \label{fig:e5to8}
+\caption{FFT , band reject , FFT with filter and inverse FFT Images } 
+
+\end{figure}
+
+\textbf{Step 2 :} Apply FFT on each plane and apply Butterworth band reject filter on FFT. And then apply inverse FFT.
+
+
+
+\newpage
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Inverse FFT of red ]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/5final_r.jpg}
+   \label{fig:e301}
+   }
+ \subfigure[Dither removed image]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/ditherremoved.jpg}
+   \label{fig:e302}
+   }
+
+\end{figure}
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Dithered region on original image ]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/before.jpg}
+   \label{fig:e303}
+   }
+ \subfigure[ After Dither Removal ]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/after.jpg}
+   \label{fig:e304}
+   }
+
+
+   \label{fig:e9to12}
+\caption{Red plane Inverse FFT, dither removed image, portion of original image before and after dither removal } 
+
+\end{figure}
+
+\textbf{Step 3 :} Merge the Filtered R, G, B images, which forms the dithered removed image as shown in Fig~\ref{fig:e302} (b). Some portion of original and dither removed are shown in Fig:~\ref{fig:e303}(c) and Fig:~\ref{fig:e304}(d).
+
+
+\newpage
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[GrayScale Image ]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/grayscale.jpg}
+   \label{fig:e401}
+   }
+ \subfigure[Binary Image, threshold = 132]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/imagethreshold.jpg}
+   \label{fig:e402}
+   }
+
+\end{figure}
+
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Connected Components on binary image ]{
+  \includegraphics[width=7cm,height=6cm]{ex1/CCC.jpg}
+   \label{fig:e403}
+   }
+
+
+
+   \label{fig:e13to15}
+\caption{ GrayScale Image, Binary Image and Connected Components of dither removed image}
+\end{figure}
+
+\textbf{Step 4 :} Convert RGB dithered removed image to gray scale, and then binarize with Otsu algorithm. Apply connected component algorithm on binary image.
+
+
+\newpage
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Normal characters ]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/4words.jpg}
+   \label{fig:e301}
+   }
+ \subfigure[Characters with matras and Vottus]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/5wordswmatrasnvottus.jpg}
+   \label{fig:e302}
+   }
+
+\end{figure}
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Bold characters ]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/6boldwrds.jpg}
+   \label{fig:e303}
+   }
+ \subfigure[ Bold characters with matras ]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/7boldtext.jpg}
+   \label{fig:e304}
+   }
+
+
+   \label{fig:e9to12}
+\caption{Different sizes of connected component images } 
+
+\end{figure}
+
+\textbf{Step 5 :}  On the height of connected components, classify them into different groups as mentioned in Table~\ref{tab:heights}.
+
+
+
+
+\newpage
+
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Graphics ]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/9graphics.jpg}
+   \label{fig:e301}
+   }
+ \subfigure[Final Text Image]{
+  \includegraphics[width=7cm,height=6.5cm]{ex1/text.jpg}
+   \label{fig:e302}
+   }
+\caption{Graphics and Final text extracted Image } 
+\end{figure}
+
+\textbf{Step 6 :} Finally the graphics in the image is eliminated and total text will be extracted.
+
+

@@ -1,0 +1,176 @@
+\documentclass[a4,12pt,oneside]{book}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{subfig}
+\usepackage{makeidx}
+\usepackage{wrapfig}
+%\usepackage{fullpage}
+\usepackage{alltt}
+\usepackage[algoruled]{algorithm2e}
+\usepackage{setspace}
+\usepackage{listings}
+\usepackage{framed}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\linespread{1.5}
+
+\geometry{tmargin=0.8 in,  bmargin=0.8 in, lmargin=1.2 in,  rmargin= 0.9 in}
+\makeindex
+\pagestyle{empty}
+\begin{titlepage}
+\thispagestyle{empty}
+  \title{\bfseries\Huge OCR Preprocessing}
+  \author{A Dissertation submitted to the University of Hyderabad\\in partial fulfillment of the degree of \\ \\
+ {\Large Master of Technology}\\in\\{\Large Computer Science}\\ \\ By\\\bf{Siva Rama Sastry Gumma}\\{11MCMT09}\\ \\
+ { \includegraphics[width=1.3in]{figures/uohyd.jpg}}
+ \\School of Computer and Information Sciences
+ \\University of Hyderabad
+ \\Prof. C R Rao Road, Gachibowli, Hyderabad - 500 046
+ \\Andhra Pradesh, India}
+\end{titlepage}
+
+\renewenvironment{frontmatter}{\pagenumbering{roman}}{\newpage
+        \pagenumbering{arabic}}
+\newenvironment{abstract}{\null\vfil\prefacesection{Abstract}}{\par\vfill\null}
+\newenvironment{acknowledgments}{\null\vfil\prefacesection{Acknowledgments}}{\par\vfill\null}
+\newenvironment{abbrevations}{\null\vfil\prefacesection{Abbreviations}}{\par\vfill\null}
+\newenvironment{notations}{\null\vfil\prefacesection{Notations}}{\par\vfill\null}
+\renewcommand{\bibname}{Bibliography}
+
+\newenvironment{dedication}
+  {\centering
+  \thispagestyle{empty}
+  \clearpage\null\vfill
+  \sl {\large To,}\\
+  \hspace{1.5in}}{
+  \vspace{3in}\vfill\null}
+  \def\prefacesection#1{%
+  \chapter*{#1}
+  \addcontentsline{toc}{chapter}{#1}
+  \markboth{#1}{#1}
+  }
+ 
+\date{}
+
+\begin{document}
+\maketitle
+\pagestyle{plain}
+ 
+%==========================
+\begin{frontmatter}
+{
+\thispagestyle{empty}
+\begin{center}
+{ \includegraphics[width=1.5in]{figures/uohyd.jpg}}
+
+\textbf{\large CERTIFICATE}  \end{center}\vspace{.50in}
+{This is to certify that the dissertation entitled ``\textbf{OCR Preprocessing}'' submitted by \textbf{Siva Rama Sastry Gumma}, bearing Reg. No. 11MCMT09, in partial fulfillment of the requirements for the award of Master of Technology in Computer Science is a bonafide work carried out by him under my supervision and guidance.}\\
+{The dissertation has not been submitted previously in part or in full to this or any other University or Institution for the award of any degree or diploma.}\\ \\ \\
+
+\iffalse
+\begin{center}
+\parbox[t]{3in}{ \centering Prof. Chakravathy Bhagavati\\
+Project Supervisor,\\
+School of CIS,\\
+University of Hyderabad.\\}
+\end{center}
+\vspace{1.2in}
+
+\parbox[t]{5in}{\flushright 
+\line(1,0){150}\\
+Dean,\\
+School of CIS,\\
+University of Hyderabad.\\}
+\fi
+\vspace{1.2in}
+\parbox[t]{3in}{\flushleft 
+Prof. Chakravathy Bhagavati\\
+Project Supervisor\\
+School of CIS,\\
+University of Hyderabad.\\}
+\parbox[t]{3in}{\flushright 
+Prof. Arun.K.Pujari\\
+Dean\\
+School of CIS,\\
+University of Hyderabad.\\}
+
+
+\newpage
+\begin{center}
+
+\textbf{\large \\DECLARATION}  \end{center}\vspace{.50in}
+{I Siva Rama Sastry Gumma hereby declare that this Dissertation entitled ``\textbf{OCR Preprocessing}'' submitted by me under the guidance and supervision of \textbf{Prof. Chakravathy Bhagavati} is a bonafide work. I also declare that it has not been submitted previously in part or in full to this University or other University or Institution for the award of any degree or diploma.}\\ \\ \\ \\
+\parbox[t]{3in}{\flushleft 
+Date:\\
+Place:\\}
+\parbox[t]{3in}{\flushright 
+(Siva Rama Sastry Gumma)\\
+Reg. No. 11MCMT09}
+}
+
+\begin{dedication}
+   \thispagestyle{empty}
+  {\bf My Parents and My Teachers}
+\end{dedication}
+
+\newenvironment{abstract1}{\null\vfil\prefacesection{Abstract}}{\par\vfill\null}
+\newenvironment{acknowledgments1}{\null\vfil\prefacesection{Acknowledgments}}{\par\vfill\null}
+
+\begin{acknowledgments1}
+   \input{ack.tex}
+\end{acknowledgments1}
+   
+\begin{abstract1}
+   \input{abstract.tex}
+\end{abstract1}
+
+%\addcontentsline{toc}{chapter}{List of figures}
+\listoffigures
+
+%\addcontentsline{toc}{chapter}{List of tables}
+\listoftables
+
+\tableofcontents
+
+\begin{abbrevations}
+  \input{Abbreviations.tex}
+\end{abbrevations}
+
+\begin{notations}
+   \input{Notations.tex}
+\end{notations}
+\end{frontmatter}
+\renewcommand{\baselinestretch}{1.7}
+\chapter{Introduction}
+\input{chapter1.tex}
+
+
+\chapter{Literature Survey}
+\input{chapter2.tex}
+
+\chapter{GrayScale Document  Binarization}
+\input{chapter3.tex}
+
+\chapter{Color Document  Binarization}
+\input{chapter4.tex}
+
+
+
+
+
+\chapter{Conclusion and Future Work}
+\input{concl.tex}
+
+\nocite{*}
+\bibliographystyle{plain}
+\newpage
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{thesis}
+%\newpage
+%\printindex{Appendix}
+
+\end{document}

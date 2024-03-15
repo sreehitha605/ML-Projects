@@ -1,0 +1,91 @@
+\begin{thebibliography}{10}
+
+
+
+
+\bibitem{ref-8}
+Nobuyuki Otsu
+\newblock A Threshold Selection Method from Gray-Level Histograms
+\newblock {\em IEEE Transactions on Systems and Cybernetics  (1979) },  Vol. SMC-9 No. 1 , January 1979.
+
+
+\bibitem{ref-6}
+ W.Niblack
+\newblock   An Introduction to Digital Image Processing. 1986. 
+
+ 
+ 
+ 
+
+ 
+\bibitem{ref-7}
+ J.Sauvola,T,Seppanen, S.Haapakoski and M.Pietikainen
+\newblock   Adaptive Document Binarization
+\newblock {\em ICDAR'97 4th Int. Conf. On Document Analysis and  Recognition } pages.147- 152.
+
+
+
+
+\bibitem{ref-9}
+Jung Gap Kuk and Nam Ik Cho.
+\newblock Feature Based Binarization of Document Images Degraded by Uneven Light Condition
+\newblock {\em Tenth International Conference on Document Analysis and Recognition (IC-DAR'09)},  2009.
+
+
+
+\bibitem{ref-2}
+C.Strouthopoulos, N. Papamarkos and A.E. Atsalakis
+\newblock Text Extraction in Complex Color Documents
+\newblock {\em Pattern Recognition  (2002) },  pages 1743-1758
+, 2002.
+
+
+
+\bibitem{ref-3}
+Dennis F. Dunn and Niloufer E. Mathew
+\newblock Extracting color halftones from printed documents
+using texture analysis
+\newblock {\em Pattern Recognition 33 (2000) },  pages 445-463
+, 2002.
+
+
+
+\bibitem{ref-4}
+Efthimios Badekas , Nikos Nikolaou, Nikos Papamarkos
+\newblock Text Binarization in Color Documents
+\newblock {\em Wiley Periodicals, Inc},  Vol. 16, 262–274 (2007)
+
+
+
+
+\bibitem{ref-5}
+Chun-Ming Tsai
+\newblock Intelligent region-based thresholding for color document images with highlighted regions
+\newblock {\em Pattern Recognition 45 (2012) } pages 1341-1362
+
+
+
+
+ 
+
+
+
+\bibitem{ref-10}
+D.F. Dunn, T.P. Weldon, W.E. Higgins
+\newblock
+Extracting halftones from printed documents using texture analysis
+\newblock {\em Opt. Eng 36 (4) (1997) } pages 1044-1052.
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{thebibliography}

@@ -1,0 +1,10 @@
+\hspace{0.5in}
+
+Preprocessing is important step in the development of OCR system. In preprocessing there were various modules like binarization, skew detection and correction etc. Among these modules we have chosen binarization module. Although there are many algorithms for binarization of a document image, there are lesser algorithms for the images degraded by uneven light condition. There is no standard binarization of printed  color images, because of printed color documents contains dither patterns, normal text, reversed text, colored text overlayed on colored background drawings and graphics appear with millions of different colors. Hence preprocessing for colored documents is a challenging task to work.
+
+In our work, firstly we discuss about binarization of grayscale documents which are degraded by uneven light condition and some methods for extraction of reversed text in them. Secondly for printed color documents, elimination of dither patterns using Butterworth band reject filter and  text extraction in the color documents by eliminating graphics using height of the component.
+
+
+
+
+ 

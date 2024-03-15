@@ -1,0 +1,60 @@
+
+
+\section{History of Binarization}
+There have been many adaptive algorithms for the binarization of a document image. To the best of our knowledge all the algorithms are basically thresholding algorithms that depend on the choice of thresholds, where the pixel is assigned the value black or white based on threshold measured compared with its original value. Although this process seems to be easy, the real difficulty is to identify the threshold. Numerous Algorithms have been discovered to identify this threshold. Out of which, Otsu \cite{ref-8}, Niblack \cite{ref-6} and Sauvola  \cite{ref-7} algorithms are some  of the common ones in gray scale image binarization.\\ \newline
+Even though these algorithms give satisfactory results on many types of documents, they often fail to handle uneven lighting conditions and when working with severely degraded images. Also there are no standard algorithms for binarization of color documents. This is because of printed color documents are much more complex with patterns, text, drawings and graphics appearing with many of different colors. A further complication is the use of half-toning process in printing that leads to regular dot-patterns, called \textit{dither patterns} in shaded areas. In order to identify the dither patterns frequency domain and not spatial domain is considered more suitable. As a part literature survey, we identified some of the papers which give solutions to these problems.
+\section{Gray scale Images under Uneven light condition}
+ 
+\begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=4in]{figures/s_unevenlight.jpg}
+\caption{Observed images with uneven light distribution }
+\label{fig:unevenlight}
+\end{figure} 
+ 
+ 
+ 
+ Above images, as shown in Fig.~\ref{fig:unevenlight}, are degraded because of uneven lighting condition. A global threshold or a local area threshold will not work on these kind of Images. A different approach is based on classification of pixels : whether it belongs to
+text or background. A slight modification of this approach is to classify a pixel into three regions (text region, near text region or background region) \cite{ref-9}. They use mean filter responses of the pixel for n = 1,3,5,$ \cdots $,k, where n$\times$n is the dimension of the filter mask. A graph plotted between filter size and the value obtained by the filter is used for classification.
+ 
+Filter responses for a text region pixel increase as the value of filter increases. For near text region pixel the value of pixel decreases as the filter size increases. Responses for background pixels are almost flat as size of the filter increases.
+ 
+ \section{Color Images Binarization}
+
+
+\subsection{Text Extraction using ACR and PLA Techniques}
+This method~\cite{ref-2} uses  a combination of  adaptive color reduction (ACR) technique and a page layout analysis (PLA) procedure to extract text in given document image. ACR technique is used to obtain optimal number of colors (\textit{principal} colours) in the document. Then, using the principal colors, the document image is split into the separable color planes. On each color plane, PLA procedure is applied to identify the text regions. A merging procedure is applied in the final stage to merge the text regions derived from each of the color planes and to produce the final document. The disadvantage of this approach is that selection of optimal numbers is difficult for a printed newspaper documents as they contain many colors.
+
+\subsection{Extracting Halftone regions in Color Documents}
+ Printed documents often contain text and halftones on the same page. Generally these halftones form a uniform lattice and repeated periodic patterns. This paper~\cite{ref-3} proposes an algorithm to identify  the halftone regions in the given document.
+
+ \begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=6in]{figures/s_halftonedunn.jpg}
+\caption{Schematic of Halftone segmentation algorithm}
+\label{fig:dunnhalftone}
+\end{figure} 
+ 
+ An input document page is digitized by a scanner. The scanner produces three gray scale images, which represent the input interms of the color bands (RGB). Each image then undergoes a filtering operation. First, the image is filtered with a circularly symmetric bandpass filter in the frequency domain. The absolute value of the filter output is then computed and smoothed with a low pass filter. This filtering process transforms the halftones within each image into high-contrast regions suitable for segmentation. The three images are then passed to the segmentation stage, where the halftones are extracted from the page. 
+
+\subsection{Text Binarization in Color Documents}
+This method ~\cite{ref-4} introduces  a new color reduction technique to decrease number of colors in the document image. This technique estimates the dominant colors in the document and re-assigns the colors of original image  to reduced set. Each dominant color defines a color plane in which the connected components (CCs) are extracted. Next, in each color plane a CC filtering procedure is applied which is followed by a grouping procedure. At the end of this stage, blocks of CCs are constructed which are next redefined by obtaining the direction of connection (DOC) property for each CC. Using the DOC property, the blocks of CCs are classified as text or nontext. The identified text blocks are binarized properly using suitable binarization techniques, considering the rest of the pixels as background. The final result is a binary image which contains always black characters in white background independent of the original colors of each text block.
+
+
+\subsection{Intelligent region-based thresholding for color document images with highlighted regions}
+Rather than using  traditional method of scanning the entire document at least once, this method ~\cite{ref-5} intelligently divides a document image into several foreground regions and decides the background range for each foreground region, in order to effectively process the detected document regions. Flowchart for this method is shown below:
+
+ \begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=10cm,height=10cm]{figures/tsai.png}
+\caption{Flow diagram for the process}
+\label{fig:tsai}
+\end{figure} 
+ \newpage
+First, the color document image is transformed into a gray level image. Second, a document border and a background range determination are used to determine the border and background range in the document image, respectively. Third, the restricted background projection is employed to extract the foreground regions. Fourth, the border and the background range determination are applied again for each foreground region. Finally, the document image is converted into a binary image. The results of this  method are more accurate than global, region-based, local, and hybrid methods.
+
+From the above discussion on different methods present in the literature we can say that there is no standard technique to binarize a color document. There could be a chance of loss in text information because these methods doesn't extract any reversed text (white colored text on black background). In the coming chapters we will discuss some new methods which could extract the reversed text present in document and binarize  color document image.
+

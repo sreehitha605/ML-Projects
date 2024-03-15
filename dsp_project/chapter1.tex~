@@ -1,0 +1,47 @@
+\section{Introduction to OCR}
+Optical character recognition abbreviated to OCR, is the electronic conversion of scanned images of handwritten or printed text into machine-encoded text. Machine encoded text can be edited as required by the user.
+In this process of conversion, the input document gone through different stages. The three main stages of OCR are 
+\begin{itemize}
+\item Pre-processing 
+\item Recognition 
+\item  Post processing 
+\end{itemize}
+ The first stage is preprocessing, which mainly deals with document binarization, skew detection, document layout estimation, and line, word, character segmentation etc., The second stage is recognition, which usually involves calculating a number of statistical
+parameters and to recognize the character. Many of pattern recognition techniques like glymph recognition, bayesian classifications are been used in this process. The final stage is post processing, which includes language processing techniques which verifies that, the whether recognized word is a valid or not.
+
+Designing OCR system for Telugu is more complex than those of European languages due to its linguistic complexity. European languages like english has just 26 alphabets and these are aligned in left to right manner so that, recognition can be done easily. But Telugu characters have modifiers which may be placed at the top, right, bottom-right, bottom or even left of the character. Hence segmentation process is more complex in Telugu OCR. Apart from the segmentation, binarization is also an important task  because  worst binarization  will leads to more noise and broken characters. The output of binarization stage is given to segmentation stage. Hence, if binarization fails, then segmentation and recognition fails. When coming to colored images there will be problems, like dither patterns, overlying color texts, reversed text comes to the picture. Extracting complete text regions in the colored images will be a challenging task.
+
+\section{Applications of OCR}
+OCR can be used in 
+
+\begin{itemize}
+
+\item More quickly to make textual versions of printed documents, e.g. book scanning, historical documents digitization.
+\item Automatic number plate detection on vehicles.
+\item Converting handwriting in real time to control a computer (pen computing).
+\item Make electronic images of printed documents searchable.
+\end{itemize}
+
+\section{Motivation}
+Following drawbacks in the existing Telugu OCR system motivated me to preprocess and binarize documents in Telugu OCR.
+\begin{itemize}
+\item Gray scale documents which are degraded with uneven lighting conditions are not been binarized correctly.
+\item There is no systematic procedure for preprocessing  of colored documents.
+\item Extraction of complete text present in the color or grayscale documents is unknowned.
+\end{itemize}
+\section{Problem Statement}
+To provide set of tools or methods to preprocess color newspaper documents and to binarize gray scale documents which are degraded with uneven lighting conditions. 
+
+\section{Organization of Thesis}
+The rest of this thesis is organised as follows: Chapter 2 gives literature survey about gray scale and color documents binarization techniques which are in literature. Chapter 3 is about binarization of gray scale documents. Chapter 4 deals about preprocessing of color documents.  The conclusion and the future scope of the work is given in Chapter 5. The input images in the complete thesis are from Telugu corpus available at University of Hyderabad.
+
+
+
+
+
+
+
+
+
+
+

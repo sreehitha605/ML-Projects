@@ -1,0 +1,267 @@
+\section{Problem Solving Approach }
+Binarization on grayscale document images is straight forward approach because it assigns black or white to the pixel based on some statistical measure. This referred paper~\cite{ref-9} uses mean filter response as  measure to classify pixels into different regions. This procedure works well for standard gray scale documents as well as documents which are degraded due to uneven lighting distribution. In the coming sections we will go through this complete procedure.
+
+\subsection{Classification of Pixels based on Mean Filter Responses}
+For each pixel, a descriptor is defined of mean filter responses. Let $ \gamma_{\mathnormal{p}}\mathnormal{(n)}$ be the response of a mean filter with support size of 2$\mathnormal{n}+1$ to the pixels centered at $\mathnormal{p}$. \newline Let $ \rho_\mathnormal{p} $ be a descriptor vector $\{ \gamma_{\mathnormal{p}}(0) , \gamma_{\mathnormal{p}}(1) \dots  \gamma_{\mathnormal{p}}(M)\} $ for a pixel $p$. Then the descriptor has three different patterns according to local variability as shown in Fig.~\ref{fig:responses}. We notice that, when pixel belongs to text region response usually increase as the size of support increases as shown in Fig.~\ref{fig:responses}(b), and if the pixel belongs to near text region, the response decreases  because the region of support includes more low level pixels (pixels with low gray level values) as the filter size gets larger as shown in Fig.~\ref{fig:responses}(c), and for a background region pixel graph tends to be flat because the region in support includes only high level pixels (pixels with high graylevel values) even if the size of support increases as shown in Fig.~\ref{fig:responses}(d). 
+
+ \begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=4in]{figures/s_response.jpg}
+\caption{Filter responses in various regions }
+\label{fig:responses}
+\end{figure} 
+
+Hence, from the above observation we can define a function $ \varGamma : \mathnormal{p} \rightarrow  \{TR ,NTR,BR \}$ where the pixel belongs either of text region, near text region or background regions. The initial value of the pixel $\gamma_{\mathnormal{p}}(0) $ (i.e., value of pixel in the original image) and $\gamma_{\mathnormal{p}}(n)$ with respect to $n$ play an important role in the classification process. As observed from the above figure, only the background region Fig.~\ref{fig:responses}(d), is almost flat and with low variation, while other regions (TR and NTR) have high variations. Also, when the variation is high, text region and near text region can be distinguished by  $ \gamma_{\mathnormal{p}}(0) $. That is, the high variation with high $ \gamma_{\mathnormal{p}}(0) $ states that the pixel belongs to near text region and high variation with low  $\gamma_{\mathnormal{p}}(0) $  means that the pixel belongs to text region. Because of this reason $ \gamma_{\mathnormal{p}}(0) $ is called the prime element.
+
+
+\begin{table}[h]
+\centering
+ \footnotesize
+\caption{Functionality of  $ \varGamma (\rho_\mathnormal{p} ) $  }
+\label{tab:summary}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|}
+\hline
+$ \varGamma (\rho_\mathnormal{p} ) $ & Condition \\
+\hline
+BR &  ${\mathnormal{v}}_{\mathnormal{p}}  \le {\mathnormal{C}}_{\mathnormal{v}}$ \\
+TR & ${\mathnormal{v}}_{\mathnormal{p}}  >  {\mathnormal{C}}_{\mathnormal{v}}$,  $ \gamma_{\mathnormal{p}}(0)   -  \gamma^{\mathnormal{min}}_{\mathnormal{p}}    <  {\mathnormal{R}}_{\mathnormal{\gamma}}$  \\ 
+NTR & ${\mathnormal{v}}_{\mathnormal{p}}  >  {\mathnormal{C}}_{\mathnormal{v}}$,  $      \gamma^{\mathnormal{max}}_{\mathnormal{p}} -          \gamma_{\mathnormal{p}}(0)      \le  {\mathnormal{R}}_{\mathnormal{\gamma}}$ \\
+\hline
+
+
+\end{tabular}
+\end{table}
+
+
+
+The variation is measured by the difference between maximum and minimum values of $\gamma_{\mathnormal{p}}$ as ${\mathnormal{v}}_{\mathnormal{p}} = \gamma^{\mathnormal{max}}_{\mathnormal{p}} - \gamma^{\mathnormal{min}}_{\mathnormal{p}} $. Hence, $ \varGamma (\rho_\mathnormal{p} ) $ is finally determined using $ \gamma_{\mathnormal{p}}(0) $ and ${\mathnormal{v}}_{\mathnormal{p}} $. The classification of pixel is done by using Table.~\ref{tab:summary} . Here ${\mathnormal{C}}_{\mathnormal{v}}$ and $ {\mathnormal{R}}_{\mathnormal{\gamma}}$ denote the thresholds for variation and strength of the prime element respectively. It is noted that the uniqueness condition guarantees the pixel to belong to only one region should be satisfied as ${\mathnormal{C}}_{\mathnormal{v}} /2  =  {\mathnormal{R}}_{\mathnormal{\gamma}}$.
+
+\section{Algorithm}
+\begin{algorithm}[H]
+\caption{Algorithm for TR, NTR and BR Classification}
+\ForEach{ pixel p(i,j) in Image }{
+ Compute Mean Filter Responses  of the pixel $p$ with mask values of  {0,1,2,$\ldots$, n} with mask sizes of 0,3,5,$\ldots$,2n+1 as $ \{ \gamma_{\mathnormal{p}}(0) , \gamma_{\mathnormal{p}}(1) \dots  \gamma_{\mathnormal{p}}(M)\} $  \;
+
+Get the Min and Max Values of $\gamma_{\mathnormal{p}} $as $ \gamma_{\mathnormal{p}}^{min}$ and $\gamma_{\mathnormal{p}}^{max} $ \;
+Let ${\mathnormal{v}}_{\mathnormal{p}} = \gamma^{\mathnormal{max}}_{\mathnormal{p}} - \gamma^{\mathnormal{min}}_{\mathnormal{p}} $ \;
+
+Input ${\mathnormal{C}}_{\mathnormal{v}}$, $ {\mathnormal{R}}_{\mathnormal{\gamma}}$  = ${\mathnormal{C}}_{\mathnormal{v}}/2$ \;
+
+
+\If{  ${\mathnormal{v}}_{\mathnormal{p}} \le   {\mathnormal{C}}_{\mathnormal{v}}$  }{
+	pixel $ \in $ BR
+}
+\ElseIf{                 ${\mathnormal{v}}_{\mathnormal{p}}  >  {\mathnormal{C}}_{\mathnormal{v}}  \And  \gamma_{\mathnormal{p}}(0)   -  \gamma^{\mathnormal{min}}_{\mathnormal{p}}    <  {\mathnormal{R}}_{\mathnormal{\gamma}}$   }{
+pixel $ \in $ TR
+}
+
+\ElseIf{     ${\mathnormal{v}}_{\mathnormal{p}}  >  {\mathnormal{C}}_{\mathnormal{v}}    \And     \gamma^{\mathnormal{max}}_{\mathnormal{p}} -          \gamma_{\mathnormal{p}}(0)      \le  {\mathnormal{R}}_{\mathnormal{\gamma}}$             }{
+
+
+ pixel $ \in $ NTR
+
+}
+
+
+
+}
+
+
+\end{algorithm}
+
+
+\newpage
+
+
+
+\section{Results}
+\subsection{TR, NTR, BR Images}
+
+\label{fig:otnb}
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Input  Image]{
+  \includegraphics[width=7cm,height=6.5cm]{figures/1img.jpg}
+   \label{fig:gray1}
+   }
+ \subfigure[Text Region]{
+  \includegraphics[width=7cm,height=6.5cm]{figures/1tr.jpg}
+   \label{fig:tr1}
+   }
+
+\end{figure}
+
+
+
+
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[NearText Region]{
+  \includegraphics[width=7cm,height=6.75cm]{figures/1tr.jpg}
+   \label{fig:ntr1}
+   }
+ \subfigure[Background Region]{
+  \includegraphics[width=7cm,height=6.75cm]{figures/1bg.jpg}
+   \label{fig:br1}
+   }
+   \label{fig:all1}
+\caption{Results for Input Image with Threshold $C_v = 20 $}
+
+\end{figure}
+
+
+
+\newpage
+
+
+\subsection{Graphs for TR,NTR,BR }
+
+
+\begin{figure}[h]
+\centering
+ \footnotesize
+ \includegraphics[width=10cm,height=7cm]{figures/bg.png}
+\caption{Graph for Background Region }
+ \label{fig:gbg}
+\end{figure} 
+
+
+
+\begin{figure}[h]
+\centering
+ \footnotesize
+  \includegraphics[width=10cm,height=7cm]{figures/tr.png}
+\caption{Graph for Text Region }
+\label{fig:gtr}
+\end{figure} 
+
+
+\begin{figure}[h]
+\centering
+ \footnotesize
+  \includegraphics[width=10cm,height=7cm]{figures/ntr.png}
+\caption{Graph forNear Text Region }
+   \label{fig:gntr}
+\end{figure} 
+
+
+
+Graphs are plotted to distinguish different regions and the coordinates of pixel present on each graph. As observed from the graphs, Fig.~\ref{fig:gbg} shows background region pixel graph is flat with low variation and Fig.~\ref{fig:gtr} is response of text region pixel, which increases as filter size increases and Fig.~\ref{fig:gntr} is response of near text region pixel, the response decreases with increase in filter size. TR and NTR graphs shows high variations in their values when compared with BR graph.
+
+
+
+
+\section{Discussion}
+\subsection{Near Text Region Importance}
+As observed from the above results Section~\ref{fig:otnb}, we can notice that text region is unable to recognize reversed text (text with black background and white foreground). But, Near Text Region is able recognize the reversed text region as well as near text pixels too. So how to extract complete text (normal text + reversed text)  in the document  is the question ? We propose a method in the coming section to extract complete text using near text region.
+
+\subsection{Extracting Complete Text using Near Text Region}
+
+\begin{algorithm}[H]
+\caption{Algorithm Finding Out Complete Text}
+
+Apply Connected Component (CC) Algorithm on the Background Region (BR) \;
+
+\ForEach{ Connected Component $CC_i$ }{
+Let ABR = Average Value Pixels $\in$ BR in the $CC_i$  \;
+    ANR = Average Value of the Pixels $\in$ NTR in the $CC_i$ \;
+    ATR = Average Value of the Pixels $\in$ TR in the $CC_i$ \;
+
+\If{ ABR $<$ANR and ATR $ +$ $ C_v $ $<$ ANR}{
+Color the Near Text Pixels $ \in  CC_i $ to gray(128)
+}
+\Else{
+Keep only the Text Region Pixels 
+}
+}
+\end{algorithm}
+
+
+
+
+\subsection{Results}
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Connected Components on BR]{
+  \includegraphics[width=7cm,height=9cm]{figures/1CC.jpg}
+   \label{fig:cc1}
+   }
+ \subfigure[Complete Text]{
+  \includegraphics[width=7cm,height=9cm]{figures/1ans.jpg}
+   \label{fig:ctt1}
+   }
+\caption{Complete Text Extraction using TR and NTR}
+\end{figure}
+\subsection{Manual Extraction of Complete Text using CCs}
+Apart from above mentioned method to extract complete text from NTR and TR Regions, we can also extract the complete text from the document manually. This procedure is straight forward, where given a grayscale image, apply the global thresholding algorithm (say Otsu) to binarize it. Now, apply the connected component algorithm to identify the CCs in the binarized image. Decrease the size of each component with some $m$ pixels in width and height directions. In the difference area before and after CCs (i.e., before - after(- indicates minus in set operation )) calculate the percentage of black pixels. If the percentage of black pixels is more than that of some threshold (say 80), indicates that it is reversed text component and reverse the black colored pixels to white and white to black. If not, it is a normal text component only. \\
+
+
+\begin{algorithm}[H]
+
+\caption{Algorithm for complete text with Manual Extraction}
+
+For the given Input image, binarize the Image using some algorithm \;
+Apply Connected Component Algorithm on the binarized Image \;
+
+\ForEach{ Connected Component $CC_i$ }{
+Decrease the size of $ CC_i $ to some $m$ pixels in both width and height directions \;
+Calculate  percentage of black pixels in difference area  \;
+\If{ percentage $\ge$ threshold   }{
+make white pixels of $ CC_i $ to black and vice-versa
+}
+\Else{
+keep the black pixels as it is.
+}
+}
+
+
+\end{algorithm}
+
+
+
+
+
+\subsection{Results obtained for manual extraction of complete text}
+
+Fig~\ref{stu1} (a) is given input image when binarized with a threshold of 160, the result obtained is Fig~\ref{stu1} (b). Fig~\ref{stu} (a) connected components with before and after modification of their sizes. Finally the  complete text extracted is shown in Fig~\ref{stu} (b). On close observation of Fig~\ref{stu} (b) we can see lines appearing in above and below reversed text components, these are because of skew in the document image.
+
+
+\begin{figure}[ht]
+ \centering
+ \subfigure[Input Image]{
+  \includegraphics[width=7cm,height=8cm]{figures/2img.jpg}
+   \label{fig:img21}
+   }
+ \subfigure[Binarized Image with threshold 160]{
+  \includegraphics[width=7cm,height=8cm]{figures/2bin.jpg}
+   \label{fig:bin21}
+      }
+\caption{ Complete text extracting with manual method - Orignal and Binarized Images}
+\label{stu1}
+\end{figure}
+  
+\begin{figure}[ht]
+ \centering
+ \subfigure[connected components with MBR low and high]{
+  \includegraphics[width=7cm,height=11cm]{figures/2cc.jpg}
+   \label{fig:cc2}
+   }
+ \subfigure[Complete Text ]{
+  \includegraphics[width=7cm,height=11cm]{figures/2tt.jpg}
+   \label{fig:tt2}
+   }
+  
+\caption{ Complete text extracting with manual method - CCs and text extraction}
+\label{stu}
+\end{figure}
+In this chapter, we have seen a better technique that improves binarization for documents which are degraded due to uneven lighting distribution. And also some new methods which could extracts complete text information in the document image. 
+
+

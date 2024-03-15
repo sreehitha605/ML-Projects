@@ -1,0 +1,17 @@
+\begin{tabular}{p{2cm} p{14cm}}
+ABR & Average Value of Background Region Pixels \\
+ANR & Average Value of NearText Region Pixels \\
+ATR & Average Value of Text Region  Pixels \\
+$ \gamma_{\mathnormal{p}}\mathnormal{(n)}$ & response of a mean filter of pixel $\mathnormal{p}$ with mask size of 2$n$ + 1  $\times$ 2$n$ + 1 \\
+$ \rho_\mathnormal{p} $  &  descriptor vector $\{ \gamma_{\mathnormal{p}}(0) , \gamma_{\mathnormal{p}}(1) \dots  \gamma_{\mathnormal{p}}(M)\} $ for a pixel $p$ \\
+$ \gamma^{\mathnormal{max}}_{\mathnormal{p}} $& Maximum value of $ \gamma_{\mathnormal{p}}\mathnormal{(n)}$ \\
+$ \gamma^{\mathnormal{min}}_{\mathnormal{p}} $& Maximum value of $ \gamma_{\mathnormal{p}}\mathnormal{(n)}$ \\
+${\mathnormal{v}}_{\mathnormal{p}} $ &  variation  measured by difference of maximum and minimum values of $\gamma_{\mathnormal{p}}$\\
+${\mathnormal{C}}_{\mathnormal{v}}$ & threshold for variation  \\
+$ {\mathnormal{R}}_{\mathnormal{\gamma}}$ & strength of the prime element\\
+D(u,v) & Normalized distance from centre (x,y) to the point (u,v) \\
+$D_o$ & radial center of the band of interest \\
+W & width of the band  of interest \\
+
+
+\end{tabular}
